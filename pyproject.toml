@@ -1,0 +1,25 @@
+[project]
+name = "nmap-query-xml"
+version = "0.0.3"
+description = "A simple program to query nmap xml files in the terminal."
+authors = [
+    {name = "honze-net"}
+]
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "python-libnmap (>=0.7.3,<0.8.0)"
+]
+
+py-modules = ["nmap_query_xml"]
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.group.dev.dependencies]
+ipython = "^8.32.0"
+
+[project.scripts]
+nmap-query-xml = "nmap_query_xml:main"
+nqx = "nmap_query_xml:main"
