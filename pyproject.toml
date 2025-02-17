@@ -6,7 +6,7 @@ authors = [
     {name = "honze-net"}
 ]
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.10"
 dependencies = [
     "python-libnmap (>=0.7.3,<0.8.0)"
 ]
