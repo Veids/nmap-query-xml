@@ -24,6 +24,7 @@ def parse_args():
     parser.add_argument("--service", help="Nmap service name to filter for. Default: Empty", default="", dest="service")
     parser.add_argument("--pattern", help="Pattern for output. Default: %(default)s", default="{service}{s}://{hostname}:{port}", dest="pattern")
     parser.add_argument("--state", help="Select a port state. Use \"all\" for all. Default: %(default)s", default="open", dest="state")
+    parser.add_argument("--conf", help="Select conf level", default=-1, dest="conf")
 
     if len(sys.argv) == 1: # If no arguments are specified, print greeter, help and exit.
         print(greeter)
@@ -43,7 +44,7 @@ def main():
 
     for host in report.hosts:
         for service in host.services:
-            if (service.state == args.state or args.state == "all") and (args.service == "" or service.service in args.service.split(",")): # TODO: Test if this is precise enough
+            if (service.state == args.state or args.state == "all") and (args.service == "" or service.service in args.service.split(",")) and (args.conf == -1 or service._service["conf"] == args.conf): # TODO: Test if this is precise enough
                 line = args.pattern
                 line = line.replace("{xmlfile}", args.xml)
                 line = line.replace("{hostname}", host.address if not host.hostnames else host.hostnames[0]) # TODO: Fix naive code.
