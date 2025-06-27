@@ -1,7 +1,8 @@
 import sys, argparse
 
-from libnmap.parser import NmapParser, NmapReport
+from typing import Optional
 from string import Template
+from libnmap.parser import NmapParser, NmapReport, NmapParserException
 
 
 class NmapQuery:
@@ -115,13 +116,25 @@ def parse_args():
     return parser.parse_args()
 
 
+def load_report(path: str) -> Optional[NmapReport]:
+    try:
+        return NmapParser.parse_fromfile(path, incomplete=False)
+    except NmapParserException:
+        try:
+            return NmapParser.parse_fromfile(path, incomplete=True)
+        except NmapParserException as exc:
+            print("NmapParser failed: %s" % exc)
+            return None
+    except IOError:
+        print("Error: File %s not found." % path)
+        return None
+
 def main():
     args = parse_args()
-    try:
-        report = NmapParser.parse_fromfile(args.xml)
-    except IOError:
-        print("Error: File %s not found." % args.xml)
-        sys.exit(1)
+    report = load_report(args.xml)
+
+    if report is None:
+        return
 
     nq = NmapQuery(
         pattern=args.pattern, conf=args.conf, service=args.service, state=args.state
